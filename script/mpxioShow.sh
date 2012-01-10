@@ -1,6 +1,14 @@
 #!/usr/bin/ksh
 
 #Gather port WWNs for all HBAs
+
+#test for the correct version of Solaris
+if [ ! "5.9" = $(uname -a) -o ! "SunOS" -eq $(uname) ]
+then
+	echo "This script only works with Solaris 9.  Sorry." >&2
+	exit
+fi
+
 HBACOUNT=0
 for ihba in `cfgadm | grep "fc-fabric" | awk '{print $1}'` ; do
 dev=`cfgadm -lv $ihba | grep "devices" | awk '{print $NF}'`
